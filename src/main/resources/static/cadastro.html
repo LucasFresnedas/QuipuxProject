@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quipux - Criar Conta</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        darkBg: '#0f172a',
+                        cardBg: '#1e293b',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-darkBg text-slate-200 flex items-center justify-center min-h-screen p-4">
+
+<div class="bg-cardBg p-8 rounded-xl shadow-2xl w-full max-w-md border border-slate-700/50">
+    <!-- Cabeçalho -->
+    <div class="text-center mb-8">
+        <h1 class="text-3xl font-extrabold text-blue-500 tracking-tight mb-2">Criar Conta</h1>
+        <p class="text-slate-400 text-sm">Cadastre um novo usuário para acessar a API</p>
+    </div>
+
+    <!-- Formulário de Cadastro -->
+    <form id="cadastroForm" onsubmit="realizarCadastro(event)" class="space-y-5">
+        <div>
+            <label for="loginInput" class="block text-slate-300 text-sm font-medium mb-2">Novo Usuário</label>
+            <input
+                    type="text"
+                    id="loginInput"
+                    class="w-full px-4 py-2.5 bg-slate-900 border border-slate-700 rounded-lg text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
+                    placeholder="Escolha um nome de usuário"
+                    required>
+        </div>
+
+        <div>
+            <label for="senhaInput" class="block text-slate-300 text-sm font-medium mb-2">Senha</label>
+            <input
+                    type="password"
+                    id="senhaInput"
+                    class="w-full px-4 py-2.5 bg-slate-900 border border-slate-700 rounded-lg text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
+                    placeholder="••••••••"
+                    required>
+        </div>
+
+        <button
+                type="submit"
+                class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-2.5 rounded-lg transition duration-200 shadow-lg shadow-emerald-600/30 active:scale-[0.99]">
+            Cadastrar
+        </button>
+    </form>
+
+    <!-- Link para Voltar ao Login -->
+    <div class="mt-6 text-center text-sm text-slate-400">
+        Já possui uma conta?
+        <a href="index.html" class="text-blue-400 hover:text-blue-300 font-semibold underline underline-offset-4 transition">
+            Voltar ao Login
+        </a>
+    </div>
+
+    <!-- Área de Resultado / Feedback -->
+    <div id="resultado" class="mt-6 p-4 rounded-lg hidden transition-all duration-300 border"></div>
+</div>
+
+<script>
+    async function realizarCadastro(event) {
+        event.preventDefault();
+
+        const login = document.getElementById('loginInput').value;
+        const senha = document.getElementById('senhaInput').value;
+        const elementoResultado = document.getElementById('resultado');
+
+        elementoResultado.className = 'mt-6 p-4 rounded-lg bg-slate-900 border-slate-700 text-slate-300 text-center text-sm block';
+        elementoResultado.innerHTML = 'Cadastrando...';
+
+        try {
+            // Requisição enviada para o seu endpoint /usuario/registrar
+            const response = await fetch('/usuario/registrar', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ login: login, senha: senha })
+            });
+
+            if (response.ok || response.status === 201) {
+                elementoResultado.className = 'mt-6 p-4 rounded-lg bg-emerald-950/60 border-emerald-800/60 text-emerald-300 text-sm block space-y-3 text-center';
+                elementoResultado.innerHTML = `
+                    <div class="font-semibold text-emerald-400">Usuário cadastrado com sucesso!</div>
+                    <p class="text-xs text-emerald-200">Você já pode retornar à página de login.</p>
+                    <a href="index.html" class="inline-block mt-2 px-4 py-2 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-500 rounded transition duration-200">
+                        Ir para o Login
+                    </a>
+                `;
+                document.getElementById('cadastroForm').reset();
+            } else {
+                const data = await response.json().catch(() => ({}));
+                elementoResultado.className = 'mt-6 p-4 rounded-lg bg-rose-950/60 border-rose-800/60 text-rose-300 text-sm block';
+                elementoResultado.innerHTML = `<strong>Erro ao cadastrar:</strong> ${data.message || 'Verifique se os dados estão corretos.'}`;
+            }
+        } catch (error) {
+            elementoResultado.className = 'mt-6 p-4 rounded-lg bg-rose-950/60 border-rose-800/60 text-rose-300 text-sm block';
+            elementoResultado.innerHTML = `<strong>Erro de Conexão:</strong> Não foi possível comunicar com o backend.`;
+        }
+    }
+</script>
+</body>
+</html>

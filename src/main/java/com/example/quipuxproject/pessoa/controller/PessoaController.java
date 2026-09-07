@@ -5,6 +5,7 @@ import com.example.quipuxproject.pessoa.dto.request.PessoaRequest;
 import com.example.quipuxproject.pessoa.dto.response.PessoaResponse;
 import com.example.quipuxproject.pessoa.service.escrita.PessoaServiceEscrita;
 import com.example.quipuxproject.pessoa.service.leitura.PessoaServiceLeitura;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,7 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/quipux/")
+@SecurityRequirement(name = "bearerAuth")
 public class PessoaController {
 
     // Injeção de dependência

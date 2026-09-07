@@ -49,6 +49,7 @@ public class JwtFilter extends OncePerRequestFilter{
             SecurityContextHolder.getContext().setAuthentication(auth);
 
         } catch (Exception e) {
+            System.err.println("Erro ao validar token JWT: " + e.getMessage());
             SecurityContextHolder.clearContext();
         }
 
