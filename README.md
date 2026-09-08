@@ -4,7 +4,7 @@ API RESTful desenvolvida em **Java** com **Spring Boot**, autenticação via **J
 
 ---
 
-## 🛠️ Tecnologias Utilizadas
+## Tecnologias Utilizadas
 
 * **Java 17** (ou versão superior)
 * **Spring Boot 3**
@@ -59,4 +59,11 @@ Fluxo de execução:
 6 - Clicar no link do swagger
 7 - Colar o token no campo que surge ao clicar no cadeado
 8 - Você pode testar todos os endpoints.
+
+É importante lembrar que se deve utilizar a interface web pela porta 8080(mesma da api)
+pois se usada pela 127.0.0.1 você terá problemas de 403. 
+
+A validação do cpf no cadastro da pessoa está feita seguindo a lógica de um cpf real.
+
+recomendo gerar um cpf sem pontuação pelo link: https://www.4devs.com.br/gerador_de_cpf
 
